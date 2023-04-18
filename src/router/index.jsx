@@ -9,6 +9,12 @@ import {
   Register,
   ProfileAdmin,
   CategoryStatusPhone,
+  ListPhoneByUser,
+  UpdateUser,
+  Submission,
+  Accepted,
+  HistorySubmission,
+  HistoryDetail,
 } from '../pages';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {BottomNavigator} from '../components';
@@ -28,6 +34,11 @@ const Router = () => {
         <Tab.Screen
           name="User List"
           component={UserList}
+          options={{headerShown: false}}
+        />
+        <Tab.Screen
+          name="Pengajuan"
+          component={Submission}
           options={{headerShown: false}}
         />
       </Tab.Navigator>
@@ -74,6 +85,31 @@ const Router = () => {
       <Stack.Screen
         name="CategoryPhoneStatus"
         component={CategoryStatusPhone}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ListPhoneByUser"
+        component={ListPhoneByUser}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="UpdateUser"
+        component={UpdateUser}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Accepted"
+        component={Accepted}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="HistorySubmission"
+        component={HistorySubmission}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="HistoryDetail"
+        component={HistoryDetail}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

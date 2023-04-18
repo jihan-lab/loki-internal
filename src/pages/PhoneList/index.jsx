@@ -7,17 +7,19 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {Gap, Header, List, StatusCategory} from '../../components';
-import {colors, fonts, getData} from '../../utils';
+import {Gap, Header, List, StatusCategory, UserItems} from '../../components';
+import {colors, deleteData, fonts, getData} from '../../utils';
 import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
-import {IlProfile} from '../../assets';
+import {IlFirst, IlProfile, IlSecond, IlThird} from '../../assets';
+import axios from 'axios';
 
 export default function PhoneList({navigation}) {
-  const PhoneInformation = () => {
-    navigation.navigate('PhoneInformation');
-  };
+  const [rankUser, setRankUser] = useState([]);
+  const [userFromServer, setUserFromServer] = useState('');
+  const [trigger, setTrigger] = useState('');
 
   const [user, setUser] = useState('');
+  const [userName, setUserName] = useState('');
 
   const getDataUserFromLocal = async () => {
     const result = await getData('user').then(res => {
@@ -25,12 +27,57 @@ export default function PhoneList({navigation}) {
     });
     if (result) {
       setUser(result);
+      setUserName(result.username);
+    }
+  };
+
+  const getUserFromServer = async () => {
+    try {
+      await axios
+        .get(`http://loki-api.boncabo.com/user/detail/${user.user_id}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
+        .then(res => {
+          setUserFromServer(res.data.data);
+          if (res.data.data.user_status === 'SUSPEND') {
+            deleteData('user');
+            navigation.replace('Login');
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getRankUserList = async () => {
+    try {
+      const result = await axios.get(
+        'http://loki-api.boncabo.com/user/list_user',
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${user.token}`,
+          },
+        },
+      );
+      if (result) {
+        const list = result.data.data;
+        list.sort((a, b) => parseFloat(b.user_poin) - parseFloat(a.user_poin));
+        setRankUser(list);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   useEffect(() => {
     getDataUserFromLocal();
-  }, []);
+    getUserFromServer();
+    getRankUserList();
+  }, [userName]);
 
   return (
     <View style={styles.page}>
@@ -82,6 +129,33 @@ export default function PhoneList({navigation}) {
           <Gap height={20} />
           <View style={styles.wrapperSection}>
             <Text style={styles.welcome}>Kinerja Pengguna</Text>
+            <View style={styles.rank}>
+              <Image style={{marginLeft: 15}} source={IlFirst} />
+              <UserItems
+                title={rankUser[0]?.user_username}
+                statusUser={`${rankUser[0]?.user_status}`}
+                point={rankUser[0]?.user_poin}
+                onPress={() => navigation.navigate('UserDetail', rankUser[0])}
+              />
+            </View>
+            <View style={styles.rank}>
+              <Image style={{marginLeft: 15}} source={IlSecond} />
+              <UserItems
+                title={rankUser[1]?.user_username}
+                statusUser={`${rankUser[1]?.user_status}`}
+                point={rankUser[1]?.user_poin}
+                onPress={() => navigation.navigate('UserDetail', rankUser[1])}
+              />
+            </View>
+            <View style={styles.rank}>
+              <Image style={{marginLeft: 15}} source={IlThird} />
+              <UserItems
+                title={rankUser[2]?.user_username}
+                statusUser={`${rankUser[2]?.user_status}`}
+                point={rankUser[2]?.user_poin}
+                onPress={() => navigation.navigate('UserDetail', rankUser[3])}
+              />
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -90,6 +164,12 @@ export default function PhoneList({navigation}) {
 }
 
 const styles = StyleSheet.create({
+  rank: {
+    backgroundColor: colors.cardLight,
+    marginTop: 5,
+    paddingTop: 10,
+    borderRadius: 20,
+  },
   font_title: {
     marginLeft: 16,
     paddingVertical: 8,

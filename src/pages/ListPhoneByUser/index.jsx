@@ -6,11 +6,11 @@ import {useDispatch} from 'react-redux';
 import {Button, Gap, Header, List} from '../../components';
 import {colors, fonts, getData} from '../../utils';
 
-export default function CategoryStatusPhone({navigation, route}) {
+export default function ListPhoneByUser({navigation, route}) {
   const [phoneList, setPhoneList] = useState([]);
   const [trigger, setTrigger] = useState('');
 
-  const statusPhone = route.params;
+  const data = route.params.params;
   const [user, setUser] = useState('');
   const [userName, setUserName] = useState('');
   const [countListPhone, setCountListPhone] = useState(50);
@@ -30,7 +30,7 @@ export default function CategoryStatusPhone({navigation, route}) {
   const getListPhoneFromServer = async () => {
     try {
       const result = await axios.get(
-        `http://loki-api.boncabo.com/phone/list/${countListPhone}/${statusPhone}`,
+        `http://loki-api.boncabo.com/phone/list_by_id/${countListPhone}/${data.user_id}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -41,7 +41,9 @@ export default function CategoryStatusPhone({navigation, route}) {
       if (result) {
         setPhoneList(result?.data.data);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const PhoneInformation = item => {
@@ -53,7 +55,7 @@ export default function CategoryStatusPhone({navigation, route}) {
     try {
       dispatch({type: 'SET_LOADING', value: true});
       const result = await axios.get(
-        `http://loki-api.boncabo.com/phone/list/${countListPhone}/${statusPhone}`,
+        `http://loki-api.boncabo.com/phone/list_by_id/${countListPhone}/${data.user_id}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -70,22 +72,22 @@ export default function CategoryStatusPhone({navigation, route}) {
       dispatch({type: 'SET_LOADING', value: false});
     } catch (error) {
       console.log(error);
-      dispatch({type: 'SET_LOADING', value: true});
+      dispatch({type: 'SET_LOADING', value: false});
     }
   };
 
   useEffect(() => {
     getDataUserFromLocal();
     getListPhoneFromServer();
-  }, [userName, trigger, navigation, dispatch]);
+  }, [userName, trigger]);
 
   return (
     <View style={styles.page}>
       <View style={styles.content}>
-        <Header title={`No Telp ${statusPhone}`} />
+        <Header title={`No Telp Oleh ${data.user_username}`} />
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.InputText}>
-            <Text>{`Total No Telp ${statusPhone} :`}</Text>
+            <Text>{`Total No Telp :`}</Text>
             <Gap height={20} />
             <View
               style={{

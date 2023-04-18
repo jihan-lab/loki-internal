@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View, Image} from 'react-native';
 
 import {Header, Call, Gap} from '../../components';
 import {colors, fonts} from '../../utils';
 import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 
-const PhoneInformation = ({navigation, route}) => {
+const HistoryDetail = ({navigation, route}) => {
   const phoneNumber = route.params.phone_number;
   const data = route.params;
 
@@ -14,19 +14,20 @@ const PhoneInformation = ({navigation, route}) => {
   }, []);
   return (
     <>
-      <Header title="Informasi Nomor Telp" />
+      <Header title="Riwayat Pengajuan" />
       <SafeAreaView style={Style.container}>
         <View style={Style.box_2}>
           <View style={Style.box_1}>
             <View style={Style.box_phone}></View>
 
-            <Text style={Style.text}>Informasi</Text>
+            <Text style={Style.text}>Riwayat</Text>
             <View style={Style.InputText}>
-              <Text>{data.status}</Text>
               <Gap height={10} />
-              <Text>Oleh : {data.username}</Text>
+              <Text style={{textTransform: 'capitalize'}}>
+                {data.user_username}
+              </Text>
               <Gap height={10} />
-              <Text>Durasi, {data.duration}</Text>
+              <Text>Rp. {(1 * data.persetujuan_nominal).toLocaleString()}</Text>
               <Gap height={10} />
               <Text
                 style={{
@@ -35,16 +36,25 @@ const PhoneInformation = ({navigation, route}) => {
                   fontFamily: fonts.primary[600],
                   marginBottom: 15,
                 }}>
-                {`+${phoneNumber}`}
+                {`${data.pengajuan_status}`}
               </Text>
             </View>
           </View>
         </View>
-        <View style={Style.wrapButtonSend}>
-          <Call
-            onPress={() =>
-              RNImmediatePhoneCall.immediatePhoneCall(`+${phoneNumber}`)
-            }
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginHorizontal: -30,
+          }}>
+          <Image
+            style={{
+              width: '80%',
+              height: '80%',
+              borderRadius: 10,
+            }}
+            source={{uri: data.persetujuan_proof}}
           />
         </View>
       </SafeAreaView>
@@ -200,4 +210,4 @@ const Style = StyleSheet.create({
   },
 });
 
-export default PhoneInformation;
+export default HistoryDetail;

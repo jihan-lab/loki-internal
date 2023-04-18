@@ -7,7 +7,7 @@ export default function Profile({name, desc}) {
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.name}>{name}</Text>
-        <Text style={styles.profession}>{desc}</Text>
+        <Text style={styles.profession(desc)}>{desc}</Text>
       </View>
     </View>
   );
@@ -39,14 +39,18 @@ const styles = StyleSheet.create({
     marginTop: 16,
     textTransform: 'capitalize',
   },
-  profession: {
+  profession: desc => ({
     fontSize: 16,
     fontFamily: fonts.primary[600],
-    color: colors.text.secondary,
+    color: colors.white,
     marginTop: 2,
     textAlign: 'center',
     textTransform: 'capitalize',
-  },
+    backgroundColor: desc === 'SUSPEND' ? colors.error : colors.primary,
+    padding: 3,
+    width: 70,
+    borderRadius: 70 / 2,
+  }),
   removePhoto: {
     position: 'absolute',
     right: 8,

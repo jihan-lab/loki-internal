@@ -8,6 +8,7 @@ import StatusCategory from './StatusCategory';
 import UserItems from './UserItems';
 import Profile from './Profile';
 import ProfileItem from './ProfileItem';
+import SubmissionItem from './SubmissionItems';
 
 export {
   Background,
@@ -20,4 +21,5 @@ export {
   UserItems,
   Profile,
   ProfileItem,
+  SubmissionItem,
 };

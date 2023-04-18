@@ -2,14 +2,19 @@ import React from 'react';
 import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {colors, fonts} from '../../../utils';
 
-export default function UserItems({title, statusUser, point, onPress}) {
+export default function SubmissionItem({
+  title,
+  statusUser,
+  statusSubmission,
+  onPress,
+}) {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.titleWrapper}>
         <Text style={styles.title}>{title}</Text>
-        <Text style={styles.statusUser(statusUser)}>{statusUser}</Text>
+        <Text style={styles.statusUser}>{statusUser}</Text>
       </View>
-      <Text style={styles.point}>{(1 * point).toLocaleString()} Point</Text>
+      <Text style={styles.statusSubmission}>{statusSubmission}</Text>
     </TouchableOpacity>
   );
 }
@@ -33,18 +38,13 @@ const styles = StyleSheet.create({
     maxWidth: '80%',
     textTransform: 'capitalize',
   },
-  statusUser: statusUser => ({
+  statusUser: {
     fontSize: 12,
-    fontFamily: fonts.primary[800],
-    color: colors.white,
+    fontFamily: fonts.primary[400],
+    color: colors.text.secondary,
     marginTop: 4,
-    backgroundColor: statusUser === 'SUSPEND' ? colors.error : colors.primary,
-    padding: 3,
-    width: 70,
-    textAlign: 'center',
-    borderRadius: 70 / 2,
-  }),
-  point: {
+  },
+  statusSubmission: {
     fontFamily: fonts.primary[600],
     fontSize: 15,
     color: colors.text.primary,

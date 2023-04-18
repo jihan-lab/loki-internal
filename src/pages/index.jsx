@@ -8,6 +8,12 @@ import UserDetail from './UserDetail';
 import Register from './Register';
 import ProfileAdmin from './ProfileAdmin';
 import CategoryStatusPhone from './CategoryStatusPhone';
+import ListPhoneByUser from './ListPhoneByUser';
+import UpdateUser from './UpdateUser';
+import Submission from './Submission';
+import Accepted from './Accepted';
+import HistorySubmission from './HistorySubmission';
+import HistoryDetail from './HistoryDetail';
 
 export {
   PhoneList,
@@ -20,4 +26,10 @@ export {
   Register,
   ProfileAdmin,
   CategoryStatusPhone,
+  ListPhoneByUser,
+  UpdateUser,
+  Submission,
+  Accepted,
+  HistorySubmission,
+  HistoryDetail,
 };
